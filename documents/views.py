@@ -119,14 +119,21 @@ def complete_profile_step1(request):
             profile_image = request.FILES.get('profile_image')
             if profile_image:
                 document_data = profile_image.read()
-                user.profile_image = base64.b64encode(document_data)  # Save as binary
+                user.profile_image = base64.b64encode(document_data).decode('utf-8')  # Save as binary
             user.save()
             messages.success(request, "Profile step 1 completed successfully.")
             return redirect('documents:complete_profile_step2')  # Proceed to step 2
     else:
         form = ProfileStep1Form(instance=request.user)
+    #Decode the users profile image for display in the template
+    profile_image = None
+    if request.user.profile_image:
+        profile_image = base64.b64decodee(request.user.profile_image)
     
-    return render(request, 'complete_profile_step1.html', {'form': form})
+    return render(request, 'complete_profile_step1.html', {
+        'form': form,
+        'profile_image': profile_image
+                                                           })
 
 # Step 2 Profile Completion View
 @login_required
@@ -218,6 +225,7 @@ def view_document_content(request, document_id):
     is_pdf = False
     is_image = False
     is_docx = False
+    is_pptx = False
 
     if document.file_extension == '.pdf':
         content_type = 'application/pdf'
@@ -228,6 +236,9 @@ def view_document_content(request, document_id):
     elif document.file_extension == '.docx':
         content_type = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         is_docx = True
+    elif document.file_extension == '.pptx':
+        content_type = 'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+        is_pptx = True
 
     # Encode the file content in base64 to use in the iframe source
     base64_file_content = base64.b64encode(file_content).decode('utf-8')
@@ -239,6 +250,7 @@ def view_document_content(request, document_id):
         'is_pdf': is_pdf,
         'is_image': is_image,
         'is_docx': is_docx,
+        'is_pptx': is_pptx,
     })
 
 

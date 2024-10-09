@@ -62,9 +62,10 @@ class DocumentForm(forms.ModelForm):
         fields = ['file_name']  # Include the necessary fields
         widgets = {
             'file_content': forms.ClearableFileInput(attrs={
-                'accept': 'application/pdf,image/*,application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                'accept': 'application/pdf,image/*,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.openxmlformats-officedocument.presentationml.presentation'
             }),
         }
+
 
 class FolderForm(forms.ModelForm):
     class Meta:

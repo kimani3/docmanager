@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="{% static 'css/index.css' %}" />
+    
     {% block extra_css %}{% endblock %}
     <title>{% block title %}Document Management System{% endblock %}</title>
   </head>
@@ -56,7 +57,7 @@
         <a href="#">
           <div class="profile">
             <img
-              src="{% static 'images/profile.jpg' %}"
+              src="{% if user.profile_image %}{{ user.profile_image.url }}{% else %}{% static 'images/profile.png' %}{% endif %}"
               alt="profile picture"
               width="50"
               height="50"

@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+::after,
+::before {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+li {
+    list-style: none;
+}
+
+h1 {
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+span{
+    color:#ffffff;
+}
+
+/* Sidebar wrapper and basic styles */
+.wrapper {
+    display: flex;
+     /* full viewport height */
+    /* background-color: #0e2238; */
+    position: relative;
+}
+
+.sidebar {
+    display: flex;
+    background-color: #0e2238;
+    flex-direction: column;
+    transition: width 0.3s ease;
+    overflow-x: hidden;
+    position: fixed;
+    height: 100vh; /* Full height of viewport */ 
+    width:16.5rem;
+    padding-bottom: 60px;
+}
+
+/* Collapsed state */
+.sidebar.collapsed {
+    width: 70px;
+}
+
+/*container next to sidebar*/
+
+
+
+/*Adjust container when sidebar is collapsed */
+.sidebar.collapsed + .main {
+    margin-left: 70px; /* Adjust margin when sidebar is collapsed */
+}
+
+/* Sidebar toggle button */
+.toggle-btn {
+    align-self: flex-start;
+    background-color: transparent;
+    cursor: pointer;
+    border: 0;
+    padding: 1rem 1.5rem;
+}
+
+.toggle-btn i {
+    font-size: 1.5rem;
+    color: #ffffff !important; /* Icon color */
+}
+
+.sidebar-logo {
+    margin: 20px;
+}
+
+.sidebar-logo a {
+    color: #ffffff !important; /* Text color */
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+#sidebar.collapsed .sidebar-logo,
+#sidebar.collapsed a.sidebar-link span {
+    display: none;
+}
+
+/* Sidebar navigation */
+.sidebar-nav {
+    padding: 2rem 0;
+    overflow-y: auto; /* Allow scrolling for content that overflows */
+    flex-grow: 1; /* Fills the space between the top and footer */
+    padding-bottom: 60px;
+}
+
+a.sidebar-link {
+    padding: .625rem 1.625rem;
+    color: #ffffff !important; /* Text color for sidebar links */
+    display: block;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    border-left: 3px solid transparent;
+}
+
+.sidebar-link i {
+    font-size: 1.1rem;
+    color: #ffffff !important; /* Icon color for sidebar links */
+}
+
+a.sidebar-link:hover {
+    background-color: rgba(255, 255, 255, .075) !important;
+    border-left: 3px solid #3b7ddd !important;
+}
+
+.sidebar-item {
+    position: relative;
+}
+
+/* For dropdowns */
+#sidebar.collapsed .sidebar-item .sidebar-dropdown {
+    position: absolute;
+    top: 0;
+    left: 70px;
+    background-color: #0e2238 !important;
+    padding: 0;
+    min-width: 15rem;
+    display: none;
+}
+
+/* Sidebar collapsed state */
+.sidebar.collapsed .search-bar,
+.sidebar.collapsed .sidebar-footer {
+    display: none;
+}
+
+/* Search bar styling */
+.search-bar {
+    margin: 1rem;
+}
+
+.search-bar .input-group {
+    width: 100%; /* Full width inside the sidebar */
+}
+
+.search-bar input {
+    background-color: #fff; /* Input background */
+    color: #333; /* Input text color */
+    border: 1px solid #ccc; /* Input border */
+    border-radius: 0.25rem; /* Rounded corners */
+    padding: 0.5rem 1rem;
+}
+
+.search-bar button {
+    background-color: #3b7ddd;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+    display: inline-block;
+    margin-left: 0.25rem;
+}
+
+.search-bar button i {
+    font-size: 1rem;
+}
+
+.search-bar input:focus,
+.search-bar button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Log out button styling inside the footer */
+.sidebar-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    text-align: center;
+}
+
+.sidebar-footer a {
+    color: #ffffff !important; /* Footer link color */
+    background-color: #0e2238 !important; /* Same background color */
+    font-weight: 600;
+    text-align: center;
+    width: 100%; /* Full width of the sidebar */
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the footer link */
+.sidebar-footer a:hover {
+    background-color: rgba(255, 255, 255, .075) !important;
+}
+
+/* New container styles */
+
+.container {
+    width: auto;
+    overflow-y: auto;
+    font-size: 1.2rem;
+    height:100vh ; /* Adjusted for header/footer */
+    background-color:aliceblue; /* Ensure container background is white */
+    padding: 1rem;
+    /* margin-top: 2rem; */
+    margin-left: 16.5rem; /*Adjust based on sidebar width*/
+    margin-right: 0.4rem;
+    margin-bottom: 4rem;
+    border-radius: 7px;
+    transition: margin-left 0.3s ease, width 0.3s ease; /* Smooth transition */
+}
+
+/* When sidebar is collapsed */
+.sidebar.collapsed ~ .main .container {
+    margin-left: 100px; /* Adjusted margin when sidebar collapses */
+    width: calc(100% - 70px); /* Adjust container width */
+    background-color:aliceblue;
+}
+
+
+.container::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+/* Highlight class for text emphasis */
+.highlight {
+    background-color: yellow;
+    font-weight: bold;
+    color: black; /* Ensure readability */
+}

@@ -1,120 +1,173 @@
-<!--- base templaye -->
-<!-- prettier-ignore -->
-
 <!DOCTYPE html>
-{% load static %}
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'css/index.css' %}" />
-    {% block extra_css %}{% endblock %}
-    <title>{% block title %}Document Management System{% endblock %}</title>
-  </head>
-  <body>
-    <header>
-      <a
-        href="{% if user.is_superuser %}{% url 'custom_admin_dashboard:admin_dashboard' %}{% else %}{% url 'documents:home' %}{% endif %}"
-      >
-        <div class="left-row">
-          <img
-            src="{% static 'images/logo.jpg' %}"
-            alt="logo image"
-            width="50"
-            height="50"
-          />
-          <span>LOGO</span>
-        </div>
-      </a>
-      <div class="middle-row">
-        <form action="{% url 'documents:search' %}" method="get">
-          <input type="text" name="q" placeholder="Search" required />
-          <button type="submit">
-            <img src="{% static 'images/search.png' %} " alt="Search" />
-          </button>
-        </form>
-      </div>
-      <div class="right-row">
-        <ul>
-          <a
-            href="{% if user.is_superuser %}{% url 'custom_admin_dashboard:admin_dashboard' %}{% else %}{% url 'documents:home' %}{% endif %}"
-          >
-            <li>
-              <span
-                ><img src="{% static 'images/home.png' %}" alt="Home" /></span
-              >Home
-            </li>
-          </a>
-          <a href="#">
-            <li>
-              <span
-                ><img
-                  src="{% static 'images/notification.png' %}"
-                  alt="Notifications" /></span
-              >Notifications
-            </li>
-          </a>
-        </ul>
-        <a href="#">
-          <div class="profile">
-            <img
-              src="{% static 'images/profile.jpg' %}"
-              alt="profile picture"
-              width="50"
-              height="50"
-            />
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PaperLess</title>
+    <!-- Icons and Bootstrap CSS -->
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    {% comment %} <link rel="stylesheet" href={% static "css/index.css" %}> {% endcomment %}
+    <link rel="stylesheet" href={% static "css/style.css" %}>
+</head>
+
+<body>
+    <div class="wrapper">
+        <aside id="sidebar" class="sidebar">
+            <div class="d-flex">
+                <button id="toggle-btn" type="button" class="toggle-btn">
+                    <i class="lni lni-grid-alt"></i>
+                </button>
+                <div class="sidebar-logo">
+                    <a href="{% if user.is_superuser %}{% url 'custom_admin_dashboard:admin_dashboard' %}{% else %}{% url 'documents:home' %}{% endif %}"> PaperLess </a>
+                </div>
+            </div>
+            
+            <!-- Search bar added here -->
+            <form class="search-bar mt-3 mx-3" action="{% url 'documents:search' %}" method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search" aria-label="Search" required>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="lni lni-search"></i>
+                    </button>
+                </div>
+            </form>
+            <!-- End of search bar -->
+
+            <ul class="sidebar-nav">
+            <div class="profile">
+                <img
+                src="{% static 'images/profile.png' %}"
+                alt="profile picture"
+                width="50"
+                height="50"
+                />
             <span>{{ user.username }}</span>
-          </div>
-        </a>
-        <a href="{% url 'documents:logout' %}">
-          <div class="last">
-            <span>Logout</span>
-            <img src="{% static 'images/logout.png' %}" alt="Logout" />
-          </div>
-        </a>
-      </div>
-    </header>
+            </div>
+                <li class="sidebar-item">
+                    <a href="{% if user.is_superuser %}{% url 'custom_admin_dashboard:admin_dashboard' %}{% else %}{% url 'documents:home' %}{% endif %}" class="sidebar-link">
+                        <i class="lni lni-user"></i>
+                        <span> Profile </span>
+                    </a>
+                </li>
+                <!-- Departments section -->
+                <li class="sidebar-item">
+    <a href="#" class="sidebar-link" data-bs-toggle="collapse" data-bs-target="#departments"
+        aria-expanded="false" aria-controls="departments">
+        <i class="lni lni-network"></i>
+        <span> Departments </span>
+    </a>
+    <ul id="departments" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+        <!-- Dynamic User Department -->
+        {% if user.is_authenticated and user.department %}
+        <li class="sidebar-item">
+            <a href="{% url 'documents:department_detail' user.department.id %}" class="sidebar-link">
+                <i class="lni lni-layout"></i>
+                <span>{{ user.department.name }}</span>
+            </a>
+        </li>
+        {% endif %}
 
-    <main>
-      <section>
-        <div class="sidebar">
-          <div class="title">
-            <h1>Department</h1>
-          </div>
-          <div class="sidebar-list">
-            <nav>
-              <ul>
-                {% if user.is_authenticated and user.department %}
-                <a
-                  href="{% url 'documents:department_detail' user.department.id %}"
-                >
-                  <div class="sidebar-items">
-                    <li>{{ user.department.name }}</li>
-                  </div>
-                </a>
-                {% endif %}
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </section>
+        {% comment %} ICT Department {% endcomment %}
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link" data-bs-toggle="collapse" data-bs-target="#ict"
+                aria-expanded="false" aria-controls="ict">
+                <i class="lni lni-layout"></i>
+                <span> ICT </span>
+            </a>
+            <ul id="ict" class="sidebar-dropdown list-unstyled collapse">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Folder 1</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Folder 2</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Folder 3</a>
+                </li>
+            </ul>
+        </li>
 
-      <section>
-        <div class="container">
-          {% if messages %} {% for message in messages %}
-          <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-          {% endfor %} {% endif %}
-          <!-- prettier-ignore-start -->
-          {% block content %} {% endblock %}
-          <!-- prettier-ignore-end -->
-        </div>
-      </section>
-    </main>
+        <!-- HR Department -->
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link" data-bs-toggle="collapse" data-bs-target="#hr"
+                aria-expanded="false" aria-controls="hr">
+                <i class="lni lni-layout"></i>
+                <span> HR </span>
+            </a>
+            <ul id="hr" class="sidebar-dropdown list-unstyled collapse">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Folder 1</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Folder 2</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">Folder 3</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</li>
 
-    <footer>
-      <div class="endnote">
-        <p>COPYRIGHT | SAMUEL 2024 | +254 712 345 678, +245 787 654 321</p>
-      </div>
-    </footer>
-  </body>
+                <!-- Sidebar footer inside the ul -->
+                <li class="sidebar-footer">
+                    <a href="{% url 'documents:logout' %}" class="lni lni-exit sidebar-link">Log Out</a>
+                </li>
+            </ul>
+        </aside>
+    </div>
+    <div class="main">
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        
+        <!-- Content Block -->
+        {% block content %} 
+        {% endblock %}
+    </div>
+</div>
+
+    
+
+
+    <!-- JavaScript to handle sidebar toggle -->
+    <script>
+        {% comment %} const toggleBtn = document.getElementById('toggle-btn');
+        const sidebar = document.getElementById('sidebar');
+
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+        }); {% endcomment %}
+        // JavaScript to toggle the sidebar and adjust the container
+document.querySelector('.toggle-btn').addEventListener('click', function() {
+    const sidebar = document.querySelector('.sidebar');
+    const container = document.querySelector('.container');
+    
+    // Toggle the collapsed class for the sidebar
+    sidebar.classList.toggle('collapsed');
+
+    // Adjust the container margin and width dynamically
+    if (sidebar.classList.contains('collapsed')) {
+        container.style.marginLeft = '70px';
+        container.style.width = 'calc(100% - 70px)';
+    } else {
+        container.style.marginLeft = '16.5rem'; /* 16.5rem as per sidebar expanded */
+        container.style.width = 'calc(100% - 16.5rem)';
+    }
+});
+
+    </script>
+    
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+
 </html>
